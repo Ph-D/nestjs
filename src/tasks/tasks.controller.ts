@@ -8,10 +8,12 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { identity } from 'rxjs';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 import { TaskStatus } from './task-status.enum';
+import { Task } from './task.entity';
 import { TasksService } from './tasks.service';
 
 @Controller('tasks')
@@ -52,4 +54,19 @@ export class TasksController {
 	// 	const {status} = UpdateTaskStatusDto;
   //   return this.tasksService.updateTaskStatus(id, status);
   // }
+
+  @Get('/:id')
+  getTaskById(@Param('id') id: string): Promise<Task> {
+    return this.tasksService.getTaskById(id);
+  }
+
+  @Post()
+  createTask(@Body() CreateTaskDto: CreateTaskDto): Promise<Task> {
+    return this.tasksService.createTask(CreateTaskDto);
+  }
+
+  @Delete('/:id')
+  deletask(@Param('id') id: string): Promise<void> {
+    return this.tasksService.deleteTask(id);
+  }
 }
